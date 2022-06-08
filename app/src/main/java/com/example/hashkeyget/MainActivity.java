@@ -37,6 +37,12 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.widget.Button;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
 
@@ -44,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     private MapView mMapView;
     MenuItem mSearch;
+    Button btnClick;
+    Button btnOK;
+    Button btnClose;
 
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -58,6 +67,39 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        btnClick = findViewById(R.id.btnClick);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.bottom_sheet, null, false);
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(view);
+
+        btnClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.show();
+            }
+        });
+
+        btnOK = view.findViewById(R.id.btnOK);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "확인", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        btnClose = view.findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "닫기", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+            }
+        });
+
 
         mMapView = new MapView(MainActivity.this);
         MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(36.62974678334059, 127.45777318097677);
